@@ -16,8 +16,8 @@ ApiConnection connection = ApiConnection.Create("myservice",
 ### Creating an index.
 
 ```C#
-var management = new IndexManagementClient(connection);
-await management.CreateIndexAsync(new Index("records")
+var client = new IndexManagementClient(connection);
+await client.CreateIndexAsync(new Index("records")
     .WithStringField("id", f => f
         .IsKey()
         .IsRetrievable())
