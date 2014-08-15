@@ -32,7 +32,7 @@ await client.CreateIndexAsync(new Index("records")
 
 ```C#
 var client = new IndexManagementClient(connection);
-await client.CreateIndexAsync(new Index("records")
+await client.UpdateIndexAsync(new Index("records")
     .WithStringField("id", f => f
         .IsKey()
         .IsRetrievable())
