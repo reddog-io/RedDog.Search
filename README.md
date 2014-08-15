@@ -54,6 +54,13 @@ var client = new IndexManagementClient(connection);
 var indexes = await client.GetIndexesAsync();
 ```
 
+### Delete an index:
+
+```C#
+var client = new IndexManagementClient(connection);
+var records = client.DeleteIndexAsync("records");
+```
+
 ### Get the statistics for an index:
 
 ```C#
