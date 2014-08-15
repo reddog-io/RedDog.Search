@@ -69,3 +69,18 @@ var records = await client.GetIndexStatisticsAsync("records");
 Console.WriteLine("Total documents: {0}", records.Body.DocumentCount);
 Console.WriteLine("Total size: {0} bytes", records.Body.StorageSize);
 ```
+
+### Upload data to your index:
+
+```C#
+var client = new IndexManagementClient(connection);
+var result = await client.PopulateAsync("records",
+    new IndexOperation(IndexOperationType.Upload, "id", "1")
+        .WithProperty("title", "My first movie")
+        .WithProperty("author", "Sandrino")
+        .WithProperty("createdOn", new DateTimeOffset(2014, 8, 1, 0, 0, 0, TimeSpan.Zero)),
+    new IndexOperation(IndexOperationType.Upload, "id", "2")
+        .WithProperty("title", "My second movie")
+        .WithProperty("author", "Sandrino")
+        .WithProperty("createdOn", new DateTimeOffset(2014, 8, 2, 0, 0, 0, TimeSpan.Zero)));
+```
