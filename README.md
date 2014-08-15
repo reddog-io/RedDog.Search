@@ -6,14 +6,14 @@ This library interacts with the Microsoft Azure Search REST API. It will allow y
 
 ## Getting Started
 
-### Setting up the connection to Microsoft Azure Search
+### Setting up the connection to Microsoft Azure Search:
 
 ```C#
 ApiConnection connection = ApiConnection.Create("myservice",
   "mykey");
 ```
 
-### Creating an index.
+### Creating an index:
 
 ```C#
 var client = new IndexManagementClient(connection);
@@ -28,7 +28,7 @@ await client.CreateIndexAsync(new Index("records")
         .IsRetrievable()));
 ```
 
-### Updating an index.
+### Updating an index:
 
 ```C#
 var client = new IndexManagementClient(connection);
