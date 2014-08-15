@@ -27,3 +27,22 @@ await client.CreateIndexAsync(new Index("records")
     .WithDateTimeField("createdOn", f => f
         .IsRetrievable()));
 ```
+
+### Updating an index.
+
+```C#
+var client = new IndexManagementClient(connection);
+await client.CreateIndexAsync(new Index("records")
+    .WithStringField("id", f => f
+        .IsKey()
+        .IsRetrievable())
+    .WithStringField("author", f => f
+        .IsSearchable()
+        .IsSortable()
+        .IsRetrievable())
+    .WithStringField("title", f => f
+        .IsSearchable()
+        .IsRetrievable())
+    .WithDateTimeField("createdOn", f => f
+        .IsRetrievable()));
+```
