@@ -54,7 +54,7 @@ var client = new IndexManagementClient(connection);
 var indexes = await client.GetIndexesAsync();
 ```
 
-### Get the statistics of an index:
+### Get the statistics for an index:
 
 ```C#
 var client = new IndexManagementClient(connection);
