@@ -15,8 +15,6 @@ ApiConnection connection = ApiConnection.Create("myservice",
 
 ### Creating an index.
 
-Autofac can use [a Linq expression, a .NET type, or a pre-built instance](http://autofac.readthedocs.org/en/latest/register/registration.html) as a component:
-
 ```C#
 var management = new IndexManagementClient(connection);
 await management.CreateIndexAsync(new Index("records")
