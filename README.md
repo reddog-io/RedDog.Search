@@ -84,3 +84,24 @@ var result = await client.PopulateAsync("records",
         .WithProperty("author", "Sandrino")
         .WithProperty("createdOn", new DateTimeOffset(2014, 8, 2, 0, 0, 0, TimeSpan.Zero)));
 ```
+
+### Execute a query:
+
+
+```C#
+var client = new IndexQueryClient(connection);
+var results = await client.SearchAsync("records", new SearchQuery("movie")
+    .OrderBy("author")
+    .SearchField("title")
+    .Count(true));
+```
+
+### Handling exceptions:
+
+```C#
+var response = await client.DoSomething();
+if (!response.IsSuccess)
+{
+    Console.WriteLine("{0}: {1}", response.Error.Code, response.Error.Message);
+}
+```
