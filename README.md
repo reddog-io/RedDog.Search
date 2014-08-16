@@ -1,7 +1,7 @@
 RedDog.Search
 =============
 
-This library interacts with the Microsoft Azure Search REST API. It will allow you to do manage indexes, populate indexes and execute queries.
+This library interacts with the Microsoft Azure Search REST API. You can use the library to manage indexes, populate indexes and execute queries.
 
 
 ## Getting Started
