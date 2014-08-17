@@ -33,7 +33,7 @@ namespace RedDog.Search.Model
             set;
         }
 
-        [JsonConverter(typeof(StringEnumConverter))]
+        
         [JsonProperty("functionAggregation")]
         public FunctionAggregation FunctionAggregation
         {
