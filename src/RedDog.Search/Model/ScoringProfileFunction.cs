@@ -6,7 +6,7 @@ namespace RedDog.Search.Model
     public class ScoringProfileFunction
     {
         [JsonProperty("type")]
-        [JsonConverter(typeof(StringEnumConverter))]
+        
         public ScoringProfileFunctionType Type
         {
             get;
@@ -27,7 +27,7 @@ namespace RedDog.Search.Model
             set;
         }
         [JsonProperty("interpolation")]
-        [JsonConverter(typeof(StringEnumConverter))]
+        
         public InterpolationType Interpolation
         {
             get;

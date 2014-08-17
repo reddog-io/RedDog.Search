@@ -29,7 +29,8 @@ namespace RedDog.Search.Http
             // Configure serialization.
             _formatter = new JsonMediaTypeFormatter();
             _formatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-            _formatter.SerializerSettings.Converters.Add(new StringEnumConverter {CamelCaseText = true});
+            _formatter.SerializerSettings.Converters.Add(new StringEnumConverter { CamelCaseText = true });
+            _formatter.SerializerSettings.Converters.Add(new XsdDurationConverter());
         }
 
         public Uri BaseUri
@@ -114,13 +115,13 @@ namespace RedDog.Search.Http
                     if (formatter != null)
                     {
                         // The formatter allows us to handle a body wrapped in a root element.
-                        response.Body = await formatter(new HttpContentBodyReader(message.Content))
+                        response.Body = await formatter(new HttpContentBodyReader(message.Content, _formatter))
                             .ConfigureAwait(false);
                     }
                     else
                     {
                         // The complete body can be deserialized to an object.
-                        response.Body = await message.Content.ReadAsAsync<TResponse>()
+                        response.Body = await message.Content.ReadAsAsync<TResponse>(new[] { _formatter })
                             .ConfigureAwait(false);
                     }
                 }

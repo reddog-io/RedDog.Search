@@ -1,4 +1,5 @@
 using System.Net.Http;
+using System.Net.Http.Formatting;
 using System.Threading.Tasks;
 
 namespace RedDog.Search.Http
@@ -10,14 +11,17 @@ namespace RedDog.Search.Http
     {
         private readonly HttpContent _content;
 
-        public HttpContentBodyReader(HttpContent content)
+        private readonly JsonMediaTypeFormatter _formatter;
+
+        public HttpContentBodyReader(HttpContent content, JsonMediaTypeFormatter formatter)
         {
             _content = content;
+            _formatter = formatter;
         }
 
         public Task<T> ReadAsync<T>()
         {
-            return _content.ReadAsAsync<T>();
+            return _content.ReadAsAsync<T>(new [] { _formatter });
         }
     }
 }

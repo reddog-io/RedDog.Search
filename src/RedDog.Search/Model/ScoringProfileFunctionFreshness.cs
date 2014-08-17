@@ -1,5 +1,6 @@
 using System;
 using Newtonsoft.Json;
+using RedDog.Search.Http;
 
 namespace RedDog.Search.Model
 {
