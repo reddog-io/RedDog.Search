@@ -35,7 +35,7 @@ namespace RedDog.Search.Model
 
         
         [JsonProperty("functionAggregation")]
-        public FunctionAggregation FunctionAggregation
+        public FunctionAggregation? FunctionAggregation
         {
             get;
             set;
