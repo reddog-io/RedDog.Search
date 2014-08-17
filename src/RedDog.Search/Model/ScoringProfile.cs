@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace RedDog.Search.Model
 {
@@ -32,6 +33,7 @@ namespace RedDog.Search.Model
             set;
         }
 
+        [JsonConverter(typeof(StringEnumConverter))]
         [JsonProperty("functionAggregation")]
         public FunctionAggregation FunctionAggregation
         {
