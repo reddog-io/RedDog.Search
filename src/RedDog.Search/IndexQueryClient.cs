@@ -45,7 +45,7 @@ namespace RedDog.Search
             if (query.Skip > 0)
                 request.AddQueryParameter("$skip", query.Skip.ToString(CultureInfo.InvariantCulture));
             if (query.Top > 0)
-                request.AddQueryParameter("$skip", query.Top.ToString(CultureInfo.InvariantCulture));
+                request.AddQueryParameter("$top", query.Top.ToString(CultureInfo.InvariantCulture));
             if (query.Count)
                 request.AddQueryParameter("$count", query.Count.ToString().ToLower());
             if (!String.IsNullOrEmpty(query.OrderBy))
