@@ -90,7 +90,7 @@ var result = await client.PopulateAsync("records",
 
 ```C#
 var client = new IndexQueryClient(connection);
-var results = await client.SearchAsync("records", new SearchQuery("mov")
+var results = await client.SearchAsync("records", new SearchQuery("movie")
     .OrderBy("author")
     .SearchField("title")
     .Count(true))
