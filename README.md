@@ -90,12 +90,10 @@ var result = await client.PopulateAsync("records",
 
 ```C#
 var client = new IndexQueryClient(connection);
-var results = await client.SearchAsync("records", new SuggestionQuery("liv")
-	{
-		Fuzzy = true,
-		Select = "author",
-		Top = 10
-	});
+var results = await client.SearchAsync("records", new SearchQuery("mov")
+    .OrderBy("author")
+    .SearchField("title")
+    .Count(true))
 ```
 
 ### Execute a suggestion:
@@ -103,10 +101,12 @@ var results = await client.SearchAsync("records", new SuggestionQuery("liv")
 
 ```C#
 var client = new IndexQueryClient(connection);
-var results = await client.SuggestAsync("records", new SearchQuery("mov")
-    .OrderBy("author")
-    .SearchField("title")
-    .Count(true));
+var results = await client.SuggestAsync("records", new SuggestionQuery("liv")
+	{
+		Fuzzy = true,
+		Select = "author",
+		Top = 10
+	});
 ```
 
 ### Handling exceptions:
