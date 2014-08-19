@@ -28,7 +28,7 @@ namespace RedDog.Search
         }
 
         /// <summary>
-        /// Populate an index.
+        /// Search an index.
         /// </summary>
         /// <param name="indexName"></param>
         /// <param name="query"></param>
@@ -56,7 +56,7 @@ namespace RedDog.Search
             {
                 if (query.Facet.Contains(","))
                 {
-                    foreach (var facet in query.Facet.Split(new[] {','}, StringSplitOptions.RemoveEmptyEntries).Select(f => f.Trim()))
+                    foreach (var facet in query.Facet.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(f => f.Trim()))
                         request.AddQueryParameter("facet", facet);
                 }
                 else
@@ -75,6 +75,39 @@ namespace RedDog.Search
 
             return _connection.Execute<SearchQueryResult>(request
                 .WithUriParameter(indexName));
+        }
+
+
+        /// <summary>
+        /// Get suggestions from an index.
+        /// </summary>
+        /// <param name="indexName"></param>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public Task<IApiResponse<SuggestionResult>> SuggestAsync(string indexName, SuggestionQuery query)
+        {
+            var request = new ApiRequest("indexes/{0}/docs/suggest", HttpMethod.Get);
+            if (!String.IsNullOrEmpty(query.Search))
+                request.AddQueryParameter("search", query.Search);
+
+            request.AddQueryParameter("fuzzy", query.Fuzzy ? Boolean.TrueString : Boolean.FalseString);
+
+            if (!String.IsNullOrEmpty(query.SearchFields))
+                request.AddQueryParameter("searchFields", query.SearchFields);
+
+            if (query.Top > 0)
+                request.AddQueryParameter("$top", query.Top.ToString(CultureInfo.InvariantCulture));
+
+            if (!String.IsNullOrEmpty(query.OrderBy))
+                request.AddQueryParameter("$orderby", query.OrderBy);
+            if (!String.IsNullOrEmpty(query.Select))
+                request.AddQueryParameter("$select", query.Select);
+
+            if (!String.IsNullOrEmpty(query.Filter))
+                request.AddQueryParameter("$filter", query.Filter);
+
+
+            return _connection.Execute<SuggestionResult>(request.WithUriParameter(indexName));
         }
 
         /// <summary>
