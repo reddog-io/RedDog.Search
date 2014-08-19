@@ -90,7 +90,20 @@ var result = await client.PopulateAsync("records",
 
 ```C#
 var client = new IndexQueryClient(connection);
-var results = await client.SearchAsync("records", new SearchQuery("movie")
+var results = await client.SearchAsync("records", new SuggestionQuery("liv")
+	{
+		Fuzzy = true,
+		Select = "author",
+		Top = 10
+	});
+```
+
+### Execute a suggestion:
+
+
+```C#
+var client = new IndexQueryClient(connection);
+var results = await client.SuggestAsync("records", new SearchQuery("mov")
     .OrderBy("author")
     .SearchField("title")
     .Count(true));
