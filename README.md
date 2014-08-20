@@ -6,7 +6,7 @@ This library interacts with the Microsoft Azure Search REST API. You can use the
 
 ## Getting Started
 
-### Setting up the connection to Microsoft Azure Search:
+### Initialize the ApiConnection with your credentials:
 
 ```C#
 ApiConnection connection = ApiConnection.Create("myservice","mykey");
