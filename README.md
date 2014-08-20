@@ -93,7 +93,7 @@ var client = new IndexQueryClient(connection);
 var results = await client.SearchAsync("records", new SearchQuery("movie")
     .OrderBy("author")
     .SearchField("title")
-    .Count(true))
+    .Count(true));
 ```
 
 ### Execute a suggestion:
@@ -101,12 +101,13 @@ var results = await client.SearchAsync("records", new SearchQuery("movie")
 
 ```C#
 var client = new IndexQueryClient(connection);
-var results = await client.SuggestAsync("records", new SuggestionQuery("liv")
-	{
-		Fuzzy = true,
-		Select = "author",
-		Top = 10
-	});
+var results = await client.SuggestAsync("records", new SuggestionQuery("mov")
+	.Fuzzy(true)
+	.Select("author")
+	.Select("title")                    
+	.SearchField("title")
+	.OrderBy("title")
+	.Top(10));
 ```
 
 ### Handling exceptions:
