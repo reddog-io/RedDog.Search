@@ -9,8 +9,7 @@ This library interacts with the Microsoft Azure Search REST API. You can use the
 ### Setting up the connection to Microsoft Azure Search:
 
 ```C#
-ApiConnection connection = ApiConnection.Create("myservice",
-  "mykey");
+ApiConnection connection = ApiConnection.Create("myservice","mykey");
 ```
 
 ### Creating an index:
