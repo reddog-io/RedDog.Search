@@ -90,6 +90,7 @@
     <Compile Include="Model\SearchQueryRecord.cs" />
     <Compile Include="Model\SearchQueryResult.cs" />
     <Compile Include="Model\SuggestionQuery.cs" />
+    <Compile Include="Model\SuggestionQueryExtensions.cs" />
     <Compile Include="Model\SuggestionResult.cs" />
     <Compile Include="Model\SuggestionResultRecord.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
