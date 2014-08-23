@@ -109,6 +109,15 @@ var results = await client.SuggestAsync("records", new SuggestionQuery("mov")
 	.Top(10));
 ```
 
+### Execute a lookup:
+
+
+```C#
+var client = new IndexQueryClient(connection);
+var results = await client.SuggestAsync("records", new LookupQuery("11ad89b6-9f1b-4380-aa06-8da39df61210")
+	.Select("author,title"));
+```
+
 ### Handling exceptions:
 
 ```C#

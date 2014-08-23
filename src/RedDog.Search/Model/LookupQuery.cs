@@ -5,6 +5,15 @@ namespace RedDog.Search.Model
 {
     public class LookupQuery
     {
+        public LookupQuery()
+        {
+        }
+
+        public LookupQuery(string key)
+        {
+            Key = key;
+        }
+
         [JsonIgnore]
         public String Key
         {

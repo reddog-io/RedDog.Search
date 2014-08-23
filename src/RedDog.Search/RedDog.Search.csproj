@@ -76,6 +76,7 @@
     <Compile Include="Model\IndexOperationType.cs" />
     <Compile Include="Model\IndexOperation.cs" />
     <Compile Include="Model\LookupQuery.cs" />
+    <Compile Include="Model\LookupQueryExtensions.cs" />
     <Compile Include="Model\LookupQueryResult.cs" />
     <Compile Include="Model\PopulateOperationExtensions.cs" />
     <Compile Include="Model\ScoringProfile.cs" />
