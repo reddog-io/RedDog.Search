@@ -110,6 +110,23 @@ namespace RedDog.Search
             return _connection.Execute<SuggestionResult>(request.WithUriParameter(indexName));
         }
 
+
+        /// <summary>
+        /// Lookup a document from an index.
+        /// </summary>
+        /// <param name="indexName"></param>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public Task<IApiResponse<LookupQueryResult>> LookupAsync(string indexName, LookupQuery query)
+        {
+            var request = new ApiRequest("indexes/{0}/docs/" + query.Key, HttpMethod.Get);
+            
+            if (!String.IsNullOrEmpty(query.Select))
+                request.AddQueryParameter("$select", query.Select);
+
+            return _connection.Execute<LookupQueryResult>(request.WithUriParameter(indexName));
+        }
+
         /// <summary>
         /// Dispose resources.
         /// </summary>

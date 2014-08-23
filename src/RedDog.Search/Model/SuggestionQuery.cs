@@ -5,13 +5,13 @@ namespace RedDog.Search.Model
 {
     public class SuggestionQuery
     {
+        public SuggestionQuery()
+        {
+
+        }
 
         public SuggestionQuery(string search)
         {
-            if (string.IsNullOrWhiteSpace(search) || search.Length < 3)
-            {
-                throw new ArgumentOutOfRangeException("search", search, "The search parameter should have at least 3 characters.");
-            }
             Search = search;
         }
 
@@ -19,7 +19,7 @@ namespace RedDog.Search.Model
         public String Search
         {
             get;
-            private set;
+            set;
         }
 
 
