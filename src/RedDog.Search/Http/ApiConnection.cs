@@ -22,7 +22,7 @@ namespace RedDog.Search.Http
         {
             BaseUri = baseUri;
 
-            _client = new HttpClient {BaseAddress = BaseUri};
+            _client = new HttpClient { BaseAddress = BaseUri };
             _client.DefaultRequestHeaders.Add("api-key", apiKey);
             _client.DefaultRequestHeaders.Add("Accept", "application/json;odata.metadata=none");
 
@@ -107,7 +107,7 @@ namespace RedDog.Search.Http
         /// <returns></returns>
         private async Task<IApiResponse<TResponse>> BuildResponse<TResponse>(HttpResponseMessage message, ResultFormatter<TResponse> formatter = null)
         {
-            var response = new ApiResponse<TResponse> {StatusCode = message.StatusCode, IsSuccess = message.IsSuccessStatusCode};
+            var response = new ApiResponse<TResponse> { StatusCode = message.StatusCode, IsSuccess = message.IsSuccessStatusCode };
             if (message.Content != null)
             {
                 if (message.IsSuccessStatusCode)
@@ -130,7 +130,11 @@ namespace RedDog.Search.Http
                     // Errors should also be deserialized.
                     ErrorResponse errorResponse = await message.Content.ReadAsAsync<ErrorResponse>()
                         .ConfigureAwait(false);
-                    response.Error = errorResponse.Error;
+
+                    if (errorResponse != null)
+                    {
+                        response.Error = errorResponse.Error;    
+                    }
                 }
             }
             return response;

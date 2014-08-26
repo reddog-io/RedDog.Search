@@ -6,7 +6,7 @@ open Fake.AssemblyInfoFile
 let productDescription = "A client SDK for Microsoft Azure Search."
 let productName = "Red Dog"
 
-let version = environVarOrDefault "version" "0.2.0.0"
+let version = environVarOrDefault "version" "0.2.1.0"
 let buildDir = "./build/output/"
 let packagingDir = "./build/packages/"
 
