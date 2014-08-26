@@ -18,11 +18,11 @@ namespace RedDog.Search.Http
 
         private readonly JsonMediaTypeFormatter _formatter;
 
-        internal ApiConnection(Uri baseUri, string apiKey)
+        internal ApiConnection(Uri baseUri, string apiKey, HttpClientHandler handler)
         {
             BaseUri = baseUri;
 
-            _client = new HttpClient {BaseAddress = BaseUri};
+            _client = new HttpClient(handler) { BaseAddress = BaseUri };
             _client.DefaultRequestHeaders.Add("api-key", apiKey);
             _client.DefaultRequestHeaders.Add("Accept", "application/json;odata.metadata=none");
 
@@ -45,14 +45,16 @@ namespace RedDog.Search.Http
             GC.SuppressFinalize(this);
         }
 
-        public static ApiConnection Create(Uri baseUri, string apiKey)
+        public static ApiConnection Create(Uri baseUri, string apiKey, IWebProxy proxy = null)
         {
-            return new ApiConnection(baseUri, apiKey);
+            HttpClientHandler handler = new HttpClientHandler() { Proxy = proxy };
+            return new ApiConnection(baseUri, apiKey, handler);
         }
 
-        public static ApiConnection Create(string serviceName, string apiKey)
+        public static ApiConnection Create(string serviceName, string apiKey, IWebProxy proxy = null)
         {
-            return new ApiConnection(new Uri(String.Format(ApiConstants.BaseUrl, serviceName)), apiKey);
+            HttpClientHandler handler = new HttpClientHandler() { Proxy = proxy };
+            return new ApiConnection(new Uri(String.Format(ApiConstants.BaseUrl, serviceName)), apiKey, handler);
         }
 
         /// <summary>
@@ -107,7 +109,7 @@ namespace RedDog.Search.Http
         /// <returns></returns>
         private async Task<IApiResponse<TResponse>> BuildResponse<TResponse>(HttpResponseMessage message, ResultFormatter<TResponse> formatter = null)
         {
-            var response = new ApiResponse<TResponse> {StatusCode = message.StatusCode, IsSuccess = message.IsSuccessStatusCode};
+            var response = new ApiResponse<TResponse> { StatusCode = message.StatusCode, IsSuccess = message.IsSuccessStatusCode };
             if (message.Content != null)
             {
                 if (message.IsSuccessStatusCode)
