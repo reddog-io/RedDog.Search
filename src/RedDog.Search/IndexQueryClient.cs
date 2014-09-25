@@ -52,18 +52,8 @@ namespace RedDog.Search
                 request.AddQueryParameter("$orderby", query.OrderBy);
             if (!String.IsNullOrEmpty(query.Select))
                 request.AddQueryParameter("$select", query.Select);
-            if (!String.IsNullOrEmpty(query.Facet))
-            {
-                if (query.Facet.Contains(","))
-                {
-                    foreach (var facet in query.Facet.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(f => f.Trim()))
-                        request.AddQueryParameter("facet", facet);
-                }
-                else
-                {
-                    request.AddQueryParameter("facet", query.Facet);
-                }
-            }
+            if (query.Facets != null && query.Facets.Any())            
+                request.AddQueryParameter("facet", query.Facets);
             if (!String.IsNullOrEmpty(query.Filter))
                 request.AddQueryParameter("$filter", query.Filter);
             if (!String.IsNullOrEmpty(query.Highlight))

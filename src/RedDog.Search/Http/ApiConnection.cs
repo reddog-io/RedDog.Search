@@ -135,7 +135,7 @@ namespace RedDog.Search.Http
 
                     if (errorResponse != null)
                     {
-                        response.Error = errorResponse.Error;    
+                        response.Error = errorResponse.Error;
                     }
                 }
             }
@@ -165,7 +165,7 @@ namespace RedDog.Search.Http
         /// <returns></returns>
         private string FormatQueryStringParameter(string key, string value)
         {
-            return String.Format("{0}={1}", Uri.EscapeUriString(key), Uri.EscapeUriString(value));
+            return String.Format("{0}={1}", Uri.EscapeUriString(key), WebUtility.UrlEncode(value));
         }
 
         public virtual void Dispose(bool disposing)

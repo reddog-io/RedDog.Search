@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace RedDog.Search.Model
 {
@@ -55,12 +57,15 @@ namespace RedDog.Search.Model
             return query;
         }
 
-        public static SearchQuery Facet(this SearchQuery query, string facetField)
+        public static SearchQuery Facet(this SearchQuery query, string facetField, string facetParameters = null)
         {
-            if (String.IsNullOrEmpty(query.Facet))
-                query.Facet = facetField;
+            var fieldValue = new string[] { string.Format("{0},{1}", facetField, facetParameters).TrimEnd(',') };
+            
+            if (query.Facets == null || query.Facets.Any() == false)
+                query.Facets = fieldValue;
             else
-                query.Facet += "," + facetField;
+                query.Facets = query.Facets.Concat(fieldValue);
+
             return query;
         }
 

@@ -49,5 +49,13 @@ namespace RedDog.Search.Http
         {
             QueryParameters.Add(new Tuple<string, string>(key, value));
         }
+
+        public void AddQueryParameter(string key, IEnumerable<string> values)
+        {
+            foreach (var value in values)
+            {
+                QueryParameters.Add(new Tuple<string, string>(key, value)); 
+            }           
+        }
     }
 }

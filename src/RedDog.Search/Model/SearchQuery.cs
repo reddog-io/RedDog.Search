@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace RedDog.Search.Model
 {
@@ -70,7 +71,7 @@ namespace RedDog.Search.Model
         }
 
         [JsonProperty("facet")]
-        public string Facet
+        public IEnumerable<string> Facets
         {
             get;
             set;
