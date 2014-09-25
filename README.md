@@ -103,7 +103,7 @@ var client = new IndexQueryClient(connection);
 var results = await client.SearchAsync("records", new SearchQuery("movie")
     .OrderBy("author")
     .SearchField("title")
-	.Facet("city", "count:5")
+	.Facet("rating", "values:1|2|3")
     .Count(true));
 ```
 
