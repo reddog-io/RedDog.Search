@@ -5,7 +5,7 @@
         Sum,
         Average,
         Minimum,
-        Maxium,
+        Maximum,
         FirstMatching
     }
 }
