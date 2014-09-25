@@ -95,6 +95,18 @@ var results = await client.SearchAsync("records", new SearchQuery("movie")
     .Count(true));
 ```
 
+### Execute a query with faceting:
+
+
+```C#
+var client = new IndexQueryClient(connection);
+var results = await client.SearchAsync("records", new SearchQuery("movie")
+    .OrderBy("author")
+    .SearchField("title")
+	.Facet("city", "count:5")
+    .Count(true));
+```
+
 ### Execute a suggestion:
 
 
