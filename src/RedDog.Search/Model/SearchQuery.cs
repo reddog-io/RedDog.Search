@@ -99,7 +99,7 @@ namespace RedDog.Search.Model
         }
 
         [JsonProperty("scoringParameter")]
-        public string ScoringParameter
+        public IEnumerable<string> ScoringParameters
         {
             get;
             set;

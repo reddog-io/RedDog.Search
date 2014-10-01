@@ -92,7 +92,11 @@ namespace RedDog.Search.Model
 
         public static SearchQuery ScoringParameter(this SearchQuery query, string scoringParameter)
         {
-            query.ScoringParameter = scoringParameter;
+            if (query.ScoringParameters == null)
+            {
+                query.ScoringParameters = Enumerable.Empty<string>();
+            }
+            query.ScoringParameters = query.ScoringParameters.Concat(new[] { scoringParameter });
             return query;
         }
     }

@@ -16,10 +16,10 @@
     <copyright>Copyright 2014 (c) reddog.io</copyright>
 	<dependencies>
       <group targetFramework="net45">
-        <dependency id="Microsoft.AspNet.WebApi.Client" version="5.2.0" />
+        <dependency id="Microsoft.AspNet.WebApi.Client" version="5.2.2" />
       </group>
       <group targetFramework="net45">
-        <dependency id="Newtonsoft.Json" version="6.0.0" />
+        <dependency id="Newtonsoft.Json" version="6.0.5" />
       </group>
     </dependencies>
     <references>

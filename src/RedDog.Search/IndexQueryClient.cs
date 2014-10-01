@@ -60,14 +60,13 @@ namespace RedDog.Search
                 request.AddQueryParameter("highlight", query.Highlight);
             if (!String.IsNullOrEmpty(query.ScoringProfile))
                 request.AddQueryParameter("scoringProfile", query.ScoringProfile);
-            if (!String.IsNullOrEmpty(query.ScoringParameter))
-                request.AddQueryParameter("scoringParameter", query.ScoringParameter);
+            if (query.ScoringParameters != null && query.ScoringParameters.Any())            
+                request.AddQueryParameter("scoringParameter", query.ScoringParameters);
 
             return _connection.Execute<SearchQueryResult>(request
                 .WithUriParameter(indexName));
         }
-
-
+        
         /// <summary>
         /// Get suggestions from an index.
         /// </summary>

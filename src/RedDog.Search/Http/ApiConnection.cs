@@ -94,7 +94,8 @@ namespace RedDog.Search.Http
         /// <returns></returns>
         private HttpRequestMessage BuildRequest(IApiRequest request)
         {
-            var requestMessage = new HttpRequestMessage(request.Method, BuildUrl(request));
+            var url = BuildUrl(request);
+            var requestMessage = new HttpRequestMessage(request.Method,url );
             requestMessage.Content = request.Body != null ?
                 new ObjectContent(request.Body.GetType(), request.Body, _formatter, new MediaTypeHeaderValue("application/json")) : requestMessage.Content;
             return requestMessage;
