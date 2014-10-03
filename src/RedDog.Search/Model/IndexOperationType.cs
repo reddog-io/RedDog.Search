@@ -4,6 +4,7 @@
     {
         Upload,
         Merge,
+        MergeOrUpload,
         Delete
     }
 }
