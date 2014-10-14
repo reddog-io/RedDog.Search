@@ -30,15 +30,19 @@ Target "Build" (fun _ ->
 )
 
 Target "Package" (fun _ ->
-    let author = ["Sandrino Di Mattia"]
-    
-    // Prepare RedDog.Engine.
+    let author = 
+            [
+                "Sandrino Di Mattia"
+                "Toon De Coninck"
+            ]
+
+    // Prepare RedDog.Search.
     let workingDir = packagingDir
     let net45Dir = workingDir @@ "lib/net45/"
     CleanDirs [workingDir; net45Dir]
     CopyFile net45Dir (buildDir @@ "RedDog.Search.dll")
-    
-    // Package RedDog.Engine
+        
+    // Package RedDog.Search
     NuGet (fun p ->
         {p with
             Authors = author
