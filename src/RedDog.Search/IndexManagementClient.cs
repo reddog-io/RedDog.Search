@@ -11,20 +11,11 @@ namespace RedDog.Search
 {
     public class IndexManagementClient : IDisposable
     {
-        private readonly ApiConnection _connection;
+        private ApiConnection _connection;
 
         public IndexManagementClient(ApiConnection connection)
         {
             _connection = connection;
-        }
-
-        /// <summary>
-        /// Dispose resources.
-        /// </summary>
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
         }
 
         /// <summary>
@@ -35,7 +26,7 @@ namespace RedDog.Search
         public Task<IApiResponse<Index>> CreateIndexAsync(Index index)
         {
             return _connection.Execute<Index>(
-                new ApiRequest("indexes", HttpMethod.Post) { Body = index });
+                new ApiRequest("indexes", HttpMethod.Post) {Body = index});
         }
 
         /// <summary>
@@ -45,7 +36,7 @@ namespace RedDog.Search
         /// <returns></returns>
         public Task<IApiResponse<Index>> UpdateIndexAsync(Index index)
         {
-            return _connection.Execute<Index>(new ApiRequest("indexes/{0}", HttpMethod.Put) { Body = index }
+            return _connection.Execute<Index>(new ApiRequest("indexes/{0}", HttpMethod.Put) {Body = index}
                 .WithUriParameter(index.Name));
         }
 
@@ -86,11 +77,10 @@ namespace RedDog.Search
         /// Get all indexes.
         /// </summary>
         /// <returns></returns>
-        public async Task<IApiResponse<IEnumerable<Index>>> GetIndexesAsync()
+        public Task<IApiResponse<IEnumerable<Index>>> GetIndexesAsync()
         {
             var request = new ApiRequest("indexes", HttpMethod.Get);
-            return await _connection.Execute(request, IndexList.GetIndexes)
-                .ConfigureAwait(false);
+            return _connection.Execute(request, IndexList.GetIndexes);
         }
 
         /// <summary>
@@ -102,8 +92,22 @@ namespace RedDog.Search
         public Task<IApiResponse<IEnumerable<IndexOperationResult>>> PopulateAsync(string indexName, params IndexOperation[] operations)
         {
             return _connection.Execute(new ApiRequest("indexes/{0}/docs/index", HttpMethod.Post)
-                .WithBody(new { value = operations })
+                .WithBody(new {value = operations})
                 .WithUriParameter(indexName), IndexOperationList.GetIndexes);
+        }
+
+        ~IndexManagementClient()
+        {
+            Dispose(false);
+        }
+
+        /// <summary>
+        /// Dispose resources.
+        /// </summary>
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
 
         /// <summary>
@@ -115,7 +119,10 @@ namespace RedDog.Search
             if (disposing)
             {
                 if (_connection != null)
+                {
                     _connection.Dispose();
+                    _connection = null;
+                }
             }
         }
     }

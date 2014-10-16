@@ -14,7 +14,7 @@ namespace RedDog.Search.Http
 {
     public class ApiConnection : IDisposable
     {
-        private readonly HttpClient _client;
+        private HttpClient _client;
 
         private readonly JsonMediaTypeFormatter _formatter;
 
@@ -39,21 +39,15 @@ namespace RedDog.Search.Http
             private set;
         }
 
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
         public static ApiConnection Create(Uri baseUri, string apiKey, IWebProxy proxy = null)
         {
-            HttpClientHandler handler = new HttpClientHandler() { Proxy = proxy };
+            var handler = new HttpClientHandler() { Proxy = proxy };
             return new ApiConnection(baseUri, apiKey, handler);
         }
 
         public static ApiConnection Create(string serviceName, string apiKey, IWebProxy proxy = null)
         {
-            HttpClientHandler handler = new HttpClientHandler() { Proxy = proxy };
+            var handler = new HttpClientHandler() { Proxy = proxy };
             return new ApiConnection(new Uri(String.Format(ApiConstants.BaseUrl, serviceName)), apiKey, handler);
         }
 
@@ -64,7 +58,7 @@ namespace RedDog.Search.Http
         /// <returns></returns>
         public async Task<IApiResponse> Execute(IApiRequest request)
         {
-            IApiResponse<NullBody> response = await Execute(request, reader => Task.FromResult(new NullBody()))
+            var response = await Execute(request, reader => Task.FromResult(new NullBody()))
                 .ConfigureAwait(false);
             return response;
         }
@@ -79,7 +73,7 @@ namespace RedDog.Search.Http
         public async Task<IApiResponse<TResponse>> Execute<TResponse>(IApiRequest request, ResultFormatter<TResponse> formatter = null)
         {
             // Send the request.
-            HttpResponseMessage responseMessage = await _client.SendAsync(BuildRequest(request))
+            var responseMessage = await _client.SendAsync(BuildRequest(request))
                 .ConfigureAwait(false);
 
             // Build the response.
@@ -131,9 +125,8 @@ namespace RedDog.Search.Http
                 else
                 {
                     // Errors should also be deserialized.
-                    ErrorResponse errorResponse = await message.Content.ReadAsAsync<ErrorResponse>()
+                    var errorResponse = await message.Content.ReadAsAsync<ErrorResponse>()
                         .ConfigureAwait(false);
-
                     if (errorResponse != null)
                     {
                         response.Error = errorResponse.Error;
@@ -168,13 +161,34 @@ namespace RedDog.Search.Http
         {
             return String.Format("{0}={1}", Uri.EscapeUriString(key), WebUtility.UrlEncode(value));
         }
+        
+        ~ApiConnection()
+        {
+            Dispose(false);
+        }
 
+        /// <summary>
+        /// Dispose resources.
+        /// </summary>
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
+        /// Dispose resources.
+        /// </summary>
+        /// <param name="disposing"></param>
         public virtual void Dispose(bool disposing)
         {
             if (disposing)
             {
                 if (_client != null)
+                {
                     _client.Dispose();
+                    _client = null;
+                }
             }
         }
     }

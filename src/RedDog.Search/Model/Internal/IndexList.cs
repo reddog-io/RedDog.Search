@@ -16,7 +16,7 @@ namespace RedDog.Search.Model.Internal
 
         public static async Task<IEnumerable<Index>> GetIndexes(IBodyReader reader)
         {
-            IndexList body = await reader.ReadAsync<IndexList>()
+            var body = await reader.ReadAsync<IndexList>()
                 .ConfigureAwait(false);
             return body.Items;
         }

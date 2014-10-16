@@ -11,20 +11,11 @@ namespace RedDog.Search
 {
     public class IndexQueryClient : IDisposable
     {
-        private readonly ApiConnection _connection;
+        private ApiConnection _connection;
 
         public IndexQueryClient(ApiConnection connection)
         {
             _connection = connection;
-        }
-
-        /// <summary>
-        /// Dispose resources.
-        /// </summary>
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
         }
 
         /// <summary>
@@ -116,6 +107,20 @@ namespace RedDog.Search
             return _connection.Execute<LookupQueryResult>(request.WithUriParameter(indexName));
         }
 
+        ~IndexQueryClient()
+        {
+            Dispose(false);
+        }
+
+        /// <summary>
+        /// Dispose resources.
+        /// </summary>
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
         /// <summary>
         /// Dispose resources.
         /// </summary>
@@ -125,7 +130,10 @@ namespace RedDog.Search
             if (disposing)
             {
                 if (_connection != null)
+                {
                     _connection.Dispose();
+                    _connection = null;
+                }
             }
         }
     }
