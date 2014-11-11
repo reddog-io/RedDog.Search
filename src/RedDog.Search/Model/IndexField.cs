@@ -76,5 +76,12 @@ namespace RedDog.Search.Model
             get;
             set;
         }
+
+        [JsonProperty("analyzer")]
+        public string Analyzer
+        {
+            get;
+            set;
+        }
     }
 }
