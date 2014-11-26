@@ -43,5 +43,11 @@
             field.Suggestions = value;
             return field;
         }
+
+        public static IndexField Analyzer(this IndexField field, string value)
+        {
+            field.Analyzer = value;
+            return field;
+        }
     }
 }
