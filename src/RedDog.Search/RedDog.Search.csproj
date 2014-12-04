@@ -45,6 +45,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constants.cs" />
+    <Compile Include="Extensions\ListExtensions.cs" />
     <Compile Include="Http\ApiConnection.cs" />
     <Compile Include="Http\ApiConstants.cs" />
     <Compile Include="Http\ApiRequestExtensions.cs" />
