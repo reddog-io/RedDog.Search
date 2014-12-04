@@ -1,7 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.Net.Http;
 using System.Threading.Tasks;
-using System.Collections.Generic;
 
 using RedDog.Search.Http;
 using RedDog.Search.Model;
@@ -26,7 +27,7 @@ namespace RedDog.Search
         public Task<IApiResponse<Index>> CreateIndexAsync(Index index)
         {
             return _connection.Execute<Index>(
-                new ApiRequest("indexes", HttpMethod.Post) {Body = index});
+                new ApiRequest("indexes", HttpMethod.Post) { Body = index });
         }
 
         /// <summary>
@@ -36,7 +37,7 @@ namespace RedDog.Search
         /// <returns></returns>
         public Task<IApiResponse<Index>> UpdateIndexAsync(Index index)
         {
-            return _connection.Execute<Index>(new ApiRequest("indexes/{0}", HttpMethod.Put) {Body = index}
+            return _connection.Execute<Index>(new ApiRequest("indexes/{0}", HttpMethod.Put) { Body = index }
                 .WithUriParameter(index.Name));
         }
 
@@ -91,9 +92,31 @@ namespace RedDog.Search
         /// <returns></returns>
         public Task<IApiResponse<IEnumerable<IndexOperationResult>>> PopulateAsync(string indexName, params IndexOperation[] operations)
         {
+            if (operations.Length > Constants.MaxDocumentPerBatch)
+            {
+                throw new ArgumentException(String.Format(CultureInfo.CurrentCulture,
+                    "The operation params collection must have from 1 to {0} valid items.", Constants.MaxDocumentPerBatch));
+            }
             return _connection.Execute(new ApiRequest("indexes/{0}/docs/index", HttpMethod.Post)
-                .WithBody(new {value = operations})
+                .WithBody(new { value = operations })
                 .WithUriParameter(indexName), IndexOperationList.GetIndexes);
+        }
+
+        /// <summary>
+        /// Populate an index in batch mode
+        /// </summary>
+        /// <param name="indexName"></param>
+        /// <param name="operations"></param>
+        /// <returns></returns>
+        public Task<IApiResponse<IEnumerable<IndexOperationResult>>[]> PopulateBatchAsync(string indexName, params IndexOperation[] operations)
+        {
+            var tasks = new List<Task<IApiResponse<IEnumerable<IndexOperationResult>>>>();
+            foreach (var item in new List<IndexOperation>(operations).Chunk(Constants.MaxDocumentPerBatch))
+            {
+                tasks.Add(PopulateAsync(indexName, item.ToArray()));
+
+            }
+            return Task.WhenAll(tasks);
         }
 
         ~IndexManagementClient()
