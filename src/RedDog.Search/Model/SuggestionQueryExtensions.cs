@@ -48,5 +48,11 @@ namespace RedDog.Search.Model
                 query.Select += "," + selectField;
             return query;
         }
+
+        public static SuggestionQuery SuggesterName(this SuggestionQuery query, string suggesterName)
+        {
+            query.SuggesterName = suggesterName;
+            return query;
+        }
     }
 }

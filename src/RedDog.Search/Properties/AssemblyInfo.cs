@@ -4,10 +4,10 @@ using System.Reflection;
 [assembly: AssemblyTitleAttribute("RedDog.Search")]
 [assembly: AssemblyDescriptionAttribute("A client SDK for Microsoft Azure Search.")]
 [assembly: AssemblyProductAttribute("Red Dog")]
-[assembly: AssemblyVersionAttribute("0.5.1.0")]
-[assembly: AssemblyFileVersionAttribute("0.5.1.0")]
+[assembly: AssemblyVersionAttribute("0.5.3.0")]
+[assembly: AssemblyFileVersionAttribute("0.5.3.0")]
 namespace System {
     internal static class AssemblyVersionInformation {
-        internal const string Version = "0.5.1.0";
+        internal const string Version = "0.5.3.0";
     }
 }

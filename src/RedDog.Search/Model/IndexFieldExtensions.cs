@@ -1,4 +1,5 @@
-﻿namespace RedDog.Search.Model
+﻿using System;
+namespace RedDog.Search.Model
 {
     public static class IndexFieldExtensions
     {
@@ -38,6 +39,7 @@
             return field;
         }
 
+        [ObsoleteAttribute("Consider using the suggesters property introduced in version 2014-10-20-Preview instead of this option for suggestions. In a future version the suggestions property will be deprecated in favor of using a separate suggesters specification.")]
         public static IndexField SupportSuggestions(this IndexField field, bool value = true)
         {
             field.Suggestions = value;

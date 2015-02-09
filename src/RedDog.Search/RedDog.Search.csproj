@@ -92,6 +92,8 @@
     <Compile Include="Model\SearchQueryExtensions.cs" />
     <Compile Include="Model\SearchQueryRecord.cs" />
     <Compile Include="Model\SearchQueryResult.cs" />
+    <Compile Include="Model\Suggester.cs" />
+    <Compile Include="Model\SuggesterSearchMode.cs" />
     <Compile Include="Model\SuggestionQuery.cs" />
     <Compile Include="Model\SuggestionQueryExtensions.cs" />
     <Compile Include="Model\SuggestionResult.cs" />

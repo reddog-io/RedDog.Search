@@ -67,5 +67,11 @@ namespace RedDog.Search.Model
             set;
         }
 
+        [JsonProperty("suggesterName")]
+        public string SuggesterName
+        {
+            get;
+            set;
+        }
     }
 }

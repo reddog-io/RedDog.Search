@@ -10,6 +10,7 @@ namespace RedDog.Search.Model
         {
             Fields = new Collection<IndexField>();
             ScoringProfiles = new Collection<ScoringProfile>();
+            Suggesters = new Collection<Suggester>();
         }
 
         public Index(string name)
@@ -34,6 +35,13 @@ namespace RedDog.Search.Model
 
         [JsonProperty("scoringProfiles")]
         public ICollection<ScoringProfile> ScoringProfiles
+        {
+            get;
+            set;
+        }
+
+        [JsonProperty("suggesters")]
+        public ICollection<Suggester> Suggesters
         {
             get;
             set;

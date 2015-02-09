@@ -83,9 +83,11 @@ namespace RedDog.Search
             if (!String.IsNullOrEmpty(query.Select))
                 request.AddQueryParameter("$select", query.Select);
 
+            if (!String.IsNullOrEmpty(query.SuggesterName))
+                request.AddQueryParameter("suggesterName", query.SuggesterName);
+
             if (!String.IsNullOrEmpty(query.Filter))
                 request.AddQueryParameter("$filter", query.Filter);
-
 
             return _connection.Execute<SuggestionResult>(request.WithUriParameter(indexName));
         }
