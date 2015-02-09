@@ -8,6 +8,8 @@
 
         public const string Integer = "Edm.Int32";
 
+        public const string Integer64 = "Edm.Int64";
+
         public const string Double = "Edm.Double";
 
         public const string Boolean = "Edm.Boolean";

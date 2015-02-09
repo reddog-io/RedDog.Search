@@ -17,7 +17,6 @@ namespace RedDog.Search.Model
         {
             get;
             set;
-        }
-        
+        }        
     }
 }
