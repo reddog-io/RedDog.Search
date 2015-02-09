@@ -60,6 +60,7 @@
     <Compile Include="Http\InnerError.cs" />
     <Compile Include="Http\XsdDurationConverter.cs" />
     <Compile Include="IndexQueryClient.cs" />
+    <Compile Include="Model\Analyzers.cs" />
     <Compile Include="Model\CorsOptions.cs" />
     <Compile Include="Model\FacetResult.cs" />
     <Compile Include="Model\IndexField.cs" />
