@@ -2,6 +2,7 @@ using System;
 using System.Globalization;
 using System.Linq;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 
 using RedDog.Search.Http;
@@ -23,8 +24,19 @@ namespace RedDog.Search
         /// </summary>
         /// <param name="indexName"></param>
         /// <param name="query"></param>
-        /// <returns></returns>
         public Task<IApiResponse<SearchQueryResult>> SearchAsync(string indexName, SearchQuery query)
+        {
+            return SearchAsync(indexName, query, default(CancellationToken));
+        }
+
+        /// <summary>
+        /// Search an index.
+        /// </summary>
+        /// <param name="indexName"></param>
+        /// <param name="query"></param>
+        /// <param name="cancelToken">cancel token</param>
+        /// <returns></returns>
+        public Task<IApiResponse<SearchQueryResult>> SearchAsync(string indexName, SearchQuery query, CancellationToken cancelToken)
         {
             var request = new ApiRequest("indexes/{0}/docs", HttpMethod.Get);
             if (!String.IsNullOrEmpty(query.Query))
@@ -43,7 +55,7 @@ namespace RedDog.Search
                 request.AddQueryParameter("$orderby", query.OrderBy);
             if (!String.IsNullOrEmpty(query.Select))
                 request.AddQueryParameter("$select", query.Select);
-            if (query.Facets != null && query.Facets.Any())            
+            if (query.Facets != null && query.Facets.Any())
                 request.AddQueryParameter("facet", query.Facets);
             if (!String.IsNullOrEmpty(query.Filter))
                 request.AddQueryParameter("$filter", query.Filter);
@@ -51,13 +63,13 @@ namespace RedDog.Search
                 request.AddQueryParameter("highlight", query.Highlight);
             if (!String.IsNullOrEmpty(query.ScoringProfile))
                 request.AddQueryParameter("scoringProfile", query.ScoringProfile);
-            if (query.ScoringParameters != null && query.ScoringParameters.Any())            
+            if (query.ScoringParameters != null && query.ScoringParameters.Any())
                 request.AddQueryParameter("scoringParameter", query.ScoringParameters);
 
             return _connection.Execute<SearchQueryResult>(request
-                .WithUriParameter(indexName));
+                .WithUriParameter(indexName), cancelToken);
         }
-        
+
         /// <summary>
         /// Get suggestions from an index.
         /// </summary>
@@ -65,6 +77,18 @@ namespace RedDog.Search
         /// <param name="query"></param>
         /// <returns></returns>
         public Task<IApiResponse<SuggestionResult>> SuggestAsync(string indexName, SuggestionQuery query)
+        {
+            return SuggestAsync(indexName, query, default(CancellationToken));
+        }
+
+        /// <summary>
+        /// Get suggestions from an index.
+        /// </summary>
+        /// <param name="indexName"></param>
+        /// <param name="query"></param>
+        /// <param name="cancelToken">cancel token</param>
+        /// <returns></returns>
+        public Task<IApiResponse<SuggestionResult>> SuggestAsync(string indexName, SuggestionQuery query, CancellationToken cancelToken)
         {
             var request = new ApiRequest("indexes/{0}/docs/suggest", HttpMethod.Get);
             if (!String.IsNullOrEmpty(query.Search))
@@ -89,9 +113,8 @@ namespace RedDog.Search
             if (!String.IsNullOrEmpty(query.Filter))
                 request.AddQueryParameter("$filter", query.Filter);
 
-            return _connection.Execute<SuggestionResult>(request.WithUriParameter(indexName));
+            return _connection.Execute<SuggestionResult>(request.WithUriParameter(indexName), cancelToken);
         }
-
 
         /// <summary>
         /// Lookup a document from an index.
@@ -101,12 +124,24 @@ namespace RedDog.Search
         /// <returns></returns>
         public Task<IApiResponse<LookupQueryResult>> LookupAsync(string indexName, LookupQuery query)
         {
+            return LookupAsync(indexName, query, default(CancellationToken));
+        }
+
+        /// <summary>
+        /// Lookup a document from an index.
+        /// </summary>
+        /// <param name="indexName"></param>
+        /// <param name="query"></param>
+        /// <param name="cancelToken">cancel token</param>
+        /// <returns></returns>
+        public Task<IApiResponse<LookupQueryResult>> LookupAsync(string indexName, LookupQuery query, CancellationToken cancelToken)
+        {
             var request = new ApiRequest("indexes/{0}/docs/" + query.Key, HttpMethod.Get);
-            
+
             if (!String.IsNullOrEmpty(query.Select))
                 request.AddQueryParameter("$select", query.Select);
 
-            return _connection.Execute<LookupQueryResult>(request.WithUriParameter(indexName));
+            return _connection.Execute<LookupQueryResult>(request.WithUriParameter(indexName), cancelToken);
         }
 
         ~IndexQueryClient()

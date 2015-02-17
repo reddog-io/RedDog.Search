@@ -12,6 +12,7 @@ namespace RedDog.Search.Http
             set;
         }
 
+
         [JsonProperty("message")]
         public string Message
         {

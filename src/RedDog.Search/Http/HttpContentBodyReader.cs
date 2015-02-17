@@ -19,9 +19,9 @@ namespace RedDog.Search.Http
             _formatter = formatter;
         }
 
-        public Task<T> ReadAsync<T>()
+        public Task<T> ReadAsync<T>(System.Threading.CancellationToken cancelToken)
         {
-            return _content.ReadAsAsync<T>(new [] { _formatter });
+            return _content.ReadAsAsync<T>(new[] { _formatter }, cancelToken);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using RedDog.Search.Http;
@@ -14,9 +15,9 @@ namespace RedDog.Search.Model.Internal
             set;
         }
 
-        public static async Task<IEnumerable<Index>> GetIndexes(IBodyReader reader)
+        public static async Task<IEnumerable<Index>> GetIndexes(IBodyReader reader, CancellationToken cancelToken)
         {
-            var body = await reader.ReadAsync<IndexList>()
+            var body = await reader.ReadAsync<IndexList>(cancelToken)
                 .ConfigureAwait(false);
             return body.Items;
         }

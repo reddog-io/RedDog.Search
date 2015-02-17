@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
+using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
@@ -55,10 +56,11 @@ namespace RedDog.Search.Http
         /// Execute a request that doesn't return a result.
         /// </summary>
         /// <param name="request"></param>
+        /// <param name="cancelToken"></param>
         /// <returns></returns>
-        public async Task<IApiResponse> Execute(IApiRequest request)
+        public async Task<IApiResponse> Execute(IApiRequest request, CancellationToken cancelToken)
         {
-            var response = await Execute(request, reader => Task.FromResult(new NullBody()))
+            var response = await Execute(request, cancelToken, (reader, token) => Task.FromResult(new NullBody()))
                 .ConfigureAwait(false);
             return response;
         }
@@ -69,15 +71,16 @@ namespace RedDog.Search.Http
         /// <typeparam name="TResponse"></typeparam>
         /// <param name="request"></param>
         /// <param name="formatter"></param>
+        /// <param name="cancelToken">cancellation token</param>
         /// <returns></returns>
-        public async Task<IApiResponse<TResponse>> Execute<TResponse>(IApiRequest request, ResultFormatter<TResponse> formatter = null)
+        public async Task<IApiResponse<TResponse>> Execute<TResponse>(IApiRequest request, CancellationToken cancelToken, ResultFormatter<TResponse> formatter = null)
         {
             // Send the request.
-            var responseMessage = await _client.SendAsync(BuildRequest(request))
+            var responseMessage = await _client.SendAsync(BuildRequest(request), cancelToken)
                 .ConfigureAwait(false);
 
             // Build the response.
-            return await BuildResponse(responseMessage, formatter)
+            return await BuildResponse(responseMessage, cancelToken, formatter)
                 .ConfigureAwait(false);
         }
 
@@ -89,7 +92,7 @@ namespace RedDog.Search.Http
         private HttpRequestMessage BuildRequest(IApiRequest request)
         {
             var url = BuildUrl(request);
-            var requestMessage = new HttpRequestMessage(request.Method,url );
+            var requestMessage = new HttpRequestMessage(request.Method, url);
             requestMessage.Content = request.Body != null ?
                 new ObjectContent(request.Body.GetType(), request.Body, _formatter, new MediaTypeHeaderValue("application/json")) : requestMessage.Content;
             return requestMessage;
@@ -100,9 +103,10 @@ namespace RedDog.Search.Http
         /// </summary>
         /// <typeparam name="TResponse"></typeparam>
         /// <param name="message"></param>
+        /// <param name="cancelToken"></param>
         /// <param name="formatter"></param>
         /// <returns></returns>
-        private async Task<IApiResponse<TResponse>> BuildResponse<TResponse>(HttpResponseMessage message, ResultFormatter<TResponse> formatter = null)
+        private async Task<IApiResponse<TResponse>> BuildResponse<TResponse>(HttpResponseMessage message, CancellationToken cancelToken, ResultFormatter<TResponse> formatter = null)
         {
             var response = new ApiResponse<TResponse> { StatusCode = message.StatusCode, IsSuccess = message.IsSuccessStatusCode };
             if (message.Content != null)
@@ -112,20 +116,20 @@ namespace RedDog.Search.Http
                     if (formatter != null)
                     {
                         // The formatter allows us to handle a body wrapped in a root element.
-                        response.Body = await formatter(new HttpContentBodyReader(message.Content, _formatter))
+                        response.Body = await formatter(new HttpContentBodyReader(message.Content, _formatter), cancelToken)
                             .ConfigureAwait(false);
                     }
                     else
                     {
                         // The complete body can be deserialized to an object.
-                        response.Body = await message.Content.ReadAsAsync<TResponse>(new[] { _formatter })
+                        response.Body = await message.Content.ReadAsAsync<TResponse>(new[] { _formatter }, cancelToken)
                             .ConfigureAwait(false);
                     }
                 }
                 else
                 {
                     // Errors should also be deserialized.
-                    var errorResponse = await message.Content.ReadAsAsync<ErrorResponse>()
+                    var errorResponse = await message.Content.ReadAsAsync<ErrorResponse>(cancelToken)
                         .ConfigureAwait(false);
                     if (errorResponse != null)
                     {
@@ -161,7 +165,7 @@ namespace RedDog.Search.Http
         {
             return String.Format("{0}={1}", Uri.EscapeUriString(key), WebUtility.UrlEncode(value));
         }
-        
+
         ~ApiConnection()
         {
             Dispose(false);
