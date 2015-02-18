@@ -1,5 +1,6 @@
 using System.Net.Http;
 using System.Net.Http.Formatting;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace RedDog.Search.Http
@@ -19,9 +20,9 @@ namespace RedDog.Search.Http
             _formatter = formatter;
         }
 
-        public Task<T> ReadAsync<T>()
+        public Task<T> ReadAsync<T>(CancellationToken cancellationToken)
         {
-            return _content.ReadAsAsync<T>(new [] { _formatter });
+            return _content.ReadAsAsync<T>(new[] { _formatter }, cancellationToken);
         }
     }
 }

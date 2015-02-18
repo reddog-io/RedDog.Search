@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 
@@ -25,8 +26,18 @@ namespace RedDog.Search
         /// <returns></returns>
         public Task<IApiResponse<Index>> CreateIndexAsync(Index index)
         {
+            return CreateIndexAsync(index, default(CancellationToken));
+        }
+        /// <summary>
+        /// Create a new index.
+        /// </summary>
+        /// <param name="index"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public Task<IApiResponse<Index>> CreateIndexAsync(Index index, CancellationToken cancellationToken)
+        {
             return _connection.Execute<Index>(
-                new ApiRequest("indexes", HttpMethod.Post) {Body = index});
+                new ApiRequest("indexes", HttpMethod.Post) { Body = index }, cancellationToken);
         }
 
         /// <summary>
@@ -36,9 +47,21 @@ namespace RedDog.Search
         /// <returns></returns>
         public Task<IApiResponse<Index>> UpdateIndexAsync(Index index)
         {
-            return _connection.Execute<Index>(new ApiRequest("indexes/{0}", HttpMethod.Put) {Body = index}
-                .WithUriParameter(index.Name));
+            return UpdateIndexAsync(index, default(CancellationToken));
         }
+
+        /// <summary>
+        /// Update an existing index.
+        /// </summary>
+        /// <param name="index"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public Task<IApiResponse<Index>> UpdateIndexAsync(Index index, CancellationToken cancellationToken)
+        {
+            return _connection.Execute<Index>(new ApiRequest("indexes/{0}", HttpMethod.Put) { Body = index }
+                .WithUriParameter(index.Name), cancellationToken);
+        }
+
 
         /// <summary>
         /// Delete an index.
@@ -47,8 +70,19 @@ namespace RedDog.Search
         /// <returns></returns>
         public Task<IApiResponse> DeleteIndexAsync(string indexName)
         {
+            return DeleteIndexAsync(indexName, default(CancellationToken));
+        }
+
+        /// <summary>
+        /// Delete an index.
+        /// </summary>
+        /// <param name="indexName"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public Task<IApiResponse> DeleteIndexAsync(string indexName, CancellationToken cancellationToken)
+        {
             return _connection.Execute(new ApiRequest("indexes/{0}", HttpMethod.Delete)
-                .WithUriParameter(indexName));
+                .WithUriParameter(indexName), cancellationToken);
         }
 
         /// <summary>
@@ -58,9 +92,21 @@ namespace RedDog.Search
         /// <returns></returns>
         public Task<IApiResponse<Index>> GetIndexAsync(string indexName)
         {
-            return _connection.Execute<Index>(new ApiRequest("indexes/{0}", HttpMethod.Get)
-                .WithUriParameter(indexName));
+            return GetIndexAsync(indexName, default(CancellationToken));
         }
+
+        /// <summary>
+        /// Get an index.
+        /// </summary>
+        /// <param name="indexName"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public Task<IApiResponse<Index>> GetIndexAsync(string indexName, CancellationToken cancellationToken)
+        {
+            return _connection.Execute<Index>(new ApiRequest("indexes/{0}", HttpMethod.Get)
+                .WithUriParameter(indexName), cancellationToken);
+        }
+
 
         /// <summary>
         /// Get the index statistics.
@@ -69,9 +115,21 @@ namespace RedDog.Search
         /// <returns></returns>
         public Task<IApiResponse<IndexStatistics>> GetIndexStatisticsAsync(string indexName)
         {
-            return _connection.Execute<IndexStatistics>(new ApiRequest("indexes/{0}/stats", HttpMethod.Get)
-                .WithUriParameter(indexName));
+            return GetIndexStatisticsAsync(indexName, default(CancellationToken));
         }
+
+        /// <summary>
+        /// Get the index statistics.
+        /// </summary>
+        /// <param name="indexName"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public Task<IApiResponse<IndexStatistics>> GetIndexStatisticsAsync(string indexName, CancellationToken cancellationToken)
+        {
+            return _connection.Execute<IndexStatistics>(new ApiRequest("indexes/{0}/stats", HttpMethod.Get)
+                .WithUriParameter(indexName), cancellationToken);
+        }
+
 
         /// <summary>
         /// Get all indexes.
@@ -79,9 +137,20 @@ namespace RedDog.Search
         /// <returns></returns>
         public Task<IApiResponse<IEnumerable<Index>>> GetIndexesAsync()
         {
-            var request = new ApiRequest("indexes", HttpMethod.Get);
-            return _connection.Execute(request, IndexList.GetIndexes);
+            return GetIndexesAsync(default(CancellationToken));
         }
+
+        /// <summary>
+        /// Get all indexes.
+        /// </summary>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public Task<IApiResponse<IEnumerable<Index>>> GetIndexesAsync(CancellationToken cancellationToken)
+        {
+            var request = new ApiRequest("indexes", HttpMethod.Get);
+            return _connection.Execute(request, cancellationToken, IndexList.GetIndexes);
+        }
+
 
         /// <summary>
         /// Populate an index.
@@ -91,9 +160,21 @@ namespace RedDog.Search
         /// <returns></returns>
         public Task<IApiResponse<IEnumerable<IndexOperationResult>>> PopulateAsync(string indexName, params IndexOperation[] operations)
         {
+            return PopulateAsync(indexName, default(CancellationToken), operations);
+        }
+
+        /// <summary>
+        /// Populate an index.
+        /// </summary>
+        /// <param name="indexName"></param>
+        /// <param name="cancellationToken"></param>
+        /// <param name="operations"></param>
+        /// <returns></returns>
+        public Task<IApiResponse<IEnumerable<IndexOperationResult>>> PopulateAsync(string indexName, CancellationToken cancellationToken, params IndexOperation[] operations)
+        {
             return _connection.Execute(new ApiRequest("indexes/{0}/docs/index", HttpMethod.Post)
-                .WithBody(new {value = operations})
-                .WithUriParameter(indexName), IndexOperationList.GetIndexes);
+                .WithBody(new { value = operations })
+                .WithUriParameter(indexName), cancellationToken, IndexOperationList.GetIndexes);
         }
 
         ~IndexManagementClient()
