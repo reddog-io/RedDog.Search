@@ -58,6 +58,8 @@
     <Compile Include="Http\IApiResponse.cs" />
     <Compile Include="Http\IBodyReader.cs" />
     <Compile Include="Http\InnerError.cs" />
+    <Compile Include="Http\IRawApiRequest.cs" />
+    <Compile Include="Http\RawApiRequest.cs" />
     <Compile Include="Http\XsdDurationConverter.cs" />
     <Compile Include="IndexQueryClient.cs" />
     <Compile Include="Model\Analyzers.cs" />
