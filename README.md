@@ -95,6 +95,19 @@ var results = await client.SearchAsync("records", new SearchQuery("movie")
     .Count(true));
 ```
 
+### Execute a query by using NextLink:
+
+
+```C#
+var client = new IndexQueryClient(connection);
+var results = await client.SearchAsync("records", new SearchQuery("movie")
+    .OrderBy("author")
+    .SearchField("title")
+    .Count(true));
+
+var nextResults = await client.SearchAsync(results.Body.NextLink);
+```
+
 ### Execute a query with faceting:
 
 

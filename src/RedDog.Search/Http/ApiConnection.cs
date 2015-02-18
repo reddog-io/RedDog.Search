@@ -64,6 +64,18 @@ namespace RedDog.Search.Http
         }
 
         /// <summary>
+        /// Execute a request that doesn't return a result.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public async Task<IApiResponse> Execute(IRawApiRequest request)
+        {
+            var response = await Execute(request, reader => Task.FromResult(new NullBody()))
+                .ConfigureAwait(false);
+            return response;
+        }
+
+        /// <summary>
         /// Execute a request which returns a result.
         /// </summary>
         /// <typeparam name="TResponse"></typeparam>
@@ -82,6 +94,24 @@ namespace RedDog.Search.Http
         }
 
         /// <summary>
+        /// Execute a request which returns a result.
+        /// </summary>
+        /// <typeparam name="TResponse"></typeparam>
+        /// <param name="request"></param>
+        /// <param name="formatter"></param>
+        /// <returns></returns>
+        public async Task<IApiResponse<TResponse>> Execute<TResponse>(IRawApiRequest uriRequest, ResultFormatter<TResponse> formatter = null)
+        {
+            // Send the request.
+            var responseMessage = await _client.SendAsync(new HttpRequestMessage(uriRequest.Method, uriRequest.Url))
+                .ConfigureAwait(false);
+
+            // Build the response.
+            return await BuildResponse(responseMessage, formatter)
+                .ConfigureAwait(false);
+        }
+
+        /// <summary>
         /// Build the HttpRequestMessage based the ApiRequest.
         /// </summary>
         /// <param name="request"></param>
@@ -89,11 +119,12 @@ namespace RedDog.Search.Http
         private HttpRequestMessage BuildRequest(IApiRequest request)
         {
             var url = BuildUrl(request);
-            var requestMessage = new HttpRequestMessage(request.Method,url );
+            var requestMessage = new HttpRequestMessage(request.Method, url);
             requestMessage.Content = request.Body != null ?
                 new ObjectContent(request.Body.GetType(), request.Body, _formatter, new MediaTypeHeaderValue("application/json")) : requestMessage.Content;
             return requestMessage;
         }
+
 
         /// <summary>
         /// Build the ApiResponse based on the HttpResponseMessage.
@@ -147,6 +178,7 @@ namespace RedDog.Search.Http
                 String.Format(request.Uri, request.UriParameters.Select(p => WebUtility.UrlEncode(p) as object).ToArray()) : request.Uri;
             List<string> parameters = request.QueryParameters.Select(
                 p => FormatQueryStringParameter(p.Item1, p.Item2)).ToList();
+
             parameters.Add(FormatQueryStringParameter("api-version", ApiConstants.Version));
             return url + "?" + String.Join("&", parameters);
         }
@@ -161,7 +193,7 @@ namespace RedDog.Search.Http
         {
             return String.Format("{0}={1}", Uri.EscapeUriString(key), WebUtility.UrlEncode(value));
         }
-        
+
         ~ApiConnection()
         {
             Dispose(false);

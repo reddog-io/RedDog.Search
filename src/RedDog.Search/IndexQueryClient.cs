@@ -57,6 +57,11 @@ namespace RedDog.Search
             return _connection.Execute<SearchQueryResult>(request
                 .WithUriParameter(indexName));
         }
+
+        public Task<IApiResponse<SearchQueryResult>> SearchAsync(string nextLink)
+        {
+            return _connection.Execute<SearchQueryResult>(new RawApiRequest(nextLink, HttpMethod.Get));
+        }
         
         /// <summary>
         /// Get suggestions from an index.
