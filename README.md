@@ -108,6 +108,20 @@ var results = await client.SearchAsync("records", new SearchQuery("movie")
 var nextResults = await client.SearchAsync(results.Body.NextLink);
 ```
 
+### Execute a query with highlighting: 
+
+
+```C#
+var client = new IndexQueryClient(connection);
+var results = await client.SearchAsync("records", new SearchQuery("movie")
+    .OrderBy("author")
+    .SearchField("title")
+    .Count(true)
+	.Highlight("title")
+	.HighlightPreTag("<p>")
+	.HighlightPostTag("</p>"));
+```
+
 ### Execute a query with faceting:
 
 
