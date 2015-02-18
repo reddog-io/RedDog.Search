@@ -4,6 +4,7 @@
     {
         Magnitude,
         Freshness,
-        Distance
+        Distance,
+        Tag
     }
 }

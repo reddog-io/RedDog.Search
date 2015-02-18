@@ -6,7 +6,7 @@ namespace RedDog.Search.Model
     public class ScoringProfileFunction
     {
         [JsonProperty("type")]
-        
+
         public ScoringProfileFunctionType Type
         {
             get;
@@ -27,7 +27,7 @@ namespace RedDog.Search.Model
             set;
         }
         [JsonProperty("interpolation")]
-        
+
         public InterpolationType Interpolation
         {
             get;
@@ -50,6 +50,13 @@ namespace RedDog.Search.Model
 
         [JsonProperty("distance")]
         public ScoringProfileFunctionDistance Distance
+        {
+            get;
+            set;
+        }
+
+        [JsonProperty("tag")]
+        public ScoringProfileFunctionTag Tag
         {
             get;
             set;

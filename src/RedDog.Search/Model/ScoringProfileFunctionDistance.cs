@@ -18,4 +18,14 @@ namespace RedDog.Search.Model
             set;
         }
     }
+    
+    public class ScoringProfileFunctionTag
+    {
+        [JsonProperty("tagsParameter")]
+        public string TagsParameter
+        {
+            get;
+            set;
+        }
+    }
 }
