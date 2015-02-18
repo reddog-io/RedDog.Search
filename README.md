@@ -12,6 +12,7 @@ This library interacts with the Microsoft Azure Search REST API. You can use the
 ApiConnection connection = ApiConnection.Create("myservice","mykey");
 ```
 
+## Index Management
 
 ### Creating an index:
 
@@ -67,7 +68,6 @@ scoringProfile.Functions.Add(new ScoringProfileFunction()
 index.ScoringProfiles.Add(scoringProfile);
 ```
 
-
 ### List all indexes:
 
 ```C#
@@ -109,6 +109,7 @@ var result = await client.PopulateAsync("records",
         .WithProperty("createdOn", new DateTimeOffset(2014, 8, 2, 0, 0, 0, TimeSpan.Zero)));
 ```
 
+## Querying
 
 ### Execute a query:
 
