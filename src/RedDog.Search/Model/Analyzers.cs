@@ -30,5 +30,6 @@
         public const string Swedish = "sv.lucene";
         public const string Turkish = "tr.lucene";
         public const string Thai = "th.lucene";
+        public const string StandardAcsiiFolding = "standardasciifolding.lucene";
     }
 }
