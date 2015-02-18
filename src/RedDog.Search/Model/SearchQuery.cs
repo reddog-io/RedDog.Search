@@ -91,6 +91,20 @@ namespace RedDog.Search.Model
             set;
         }
 
+        [JsonProperty("highlightPreTag")]
+        public string HighlightPreTag
+        {
+            get;
+            set;
+        }
+
+        [JsonProperty("highlightPostTag")]
+        public string HighlightPostTag
+        {
+            get;
+            set;
+        }
+
         [JsonProperty("scoringProfile")]
         public string ScoringProfile
         {

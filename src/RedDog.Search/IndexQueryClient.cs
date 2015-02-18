@@ -49,6 +49,13 @@ namespace RedDog.Search
                 request.AddQueryParameter("$filter", query.Filter);
             if (!String.IsNullOrEmpty(query.Highlight))
                 request.AddQueryParameter("highlight", query.Highlight);
+
+            // Both HighlightPreTag AND HighlightPostTag need to be set together
+            if (!String.IsNullOrEmpty(query.HighlightPreTag) && !String.IsNullOrEmpty(query.HighlightPostTag))
+            {
+                request.AddQueryParameter("highlightPreTag", query.HighlightPreTag);
+                request.AddQueryParameter("highlightPostTag", query.HighlightPostTag);
+            }
             if (!String.IsNullOrEmpty(query.ScoringProfile))
                 request.AddQueryParameter("scoringProfile", query.ScoringProfile);
             if (query.ScoringParameters != null && query.ScoringParameters.Any())            

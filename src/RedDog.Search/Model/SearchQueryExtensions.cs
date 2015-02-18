@@ -84,6 +84,18 @@ namespace RedDog.Search.Model
             return query;
         }
 
+        public static SearchQuery HighlightPreTag(this SearchQuery query, string HighlightPreTag)
+        {
+            query.HighlightPreTag = HighlightPreTag;
+            return query;
+        }
+
+        public static SearchQuery HighlightPostTag(this SearchQuery query, string highlightPostTag)
+        {
+            query.HighlightPostTag = highlightPostTag;
+            return query;
+        }
+
         public static SearchQuery ScoringProfile(this SearchQuery query, string scoringProfile)
         {
             query.ScoringProfile = scoringProfile;
