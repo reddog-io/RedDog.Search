@@ -12,6 +12,7 @@ This library interacts with the Microsoft Azure Search REST API. You can use the
 ApiConnection connection = ApiConnection.Create("myservice","mykey");
 ```
 
+
 ### Creating an index:
 
 ```C#
@@ -26,6 +27,7 @@ await client.CreateIndexAsync(new Index("records")
     .WithDateTimeField("createdOn", f => f
         .IsRetrievable()));
 ```
+
 
 ### Updating an index:
 
@@ -46,6 +48,26 @@ await client.UpdateIndexAsync(new Index("records")
         .IsRetrievable()));
 ```
 
+
+### Adding a scoring profile
+
+```C#
+var index = new Index("products")
+// add additional fields to the index.
+
+ScoringProfile scoringProfile = new ScoringProfile();
+scoringProfile.Name = "personalized";
+scoringProfile.Functions.Add(new ScoringProfileFunction()
+{
+    Type = ScoringProfileFunctionType.Tag,
+    Boost = 2,
+    FieldName = "brandTags",
+    Tag = new ScoringProfileFunctionTag() { TagsParameter = "brands" }                
+}); 
+index.ScoringProfiles.Add(scoringProfile);
+```
+
+
 ### List all indexes:
 
 ```C#
@@ -53,12 +75,14 @@ var client = new IndexManagementClient(connection);
 var indexes = await client.GetIndexesAsync();
 ```
 
+
 ### Delete an index:
 
 ```C#
 var client = new IndexManagementClient(connection);
 var records = await client.DeleteIndexAsync("records");
 ```
+
 
 ### Get the statistics for an index:
 
@@ -68,6 +92,7 @@ var records = await client.GetIndexStatisticsAsync("records");
 Console.WriteLine("Total documents: {0}", records.Body.DocumentCount);
 Console.WriteLine("Total size: {0} bytes", records.Body.StorageSize);
 ```
+
 
 ### Upload data to your index:
 
@@ -84,8 +109,8 @@ var result = await client.PopulateAsync("records",
         .WithProperty("createdOn", new DateTimeOffset(2014, 8, 2, 0, 0, 0, TimeSpan.Zero)));
 ```
 
-### Execute a query:
 
+### Execute a query:
 
 ```C#
 var client = new IndexQueryClient(connection);
@@ -95,8 +120,8 @@ var results = await client.SearchAsync("records", new SearchQuery("movie")
     .Count(true));
 ```
 
-### Execute a query by using NextLink:
 
+### Execute a query by using NextLink:
 
 ```C#
 var client = new IndexQueryClient(connection);
@@ -108,8 +133,8 @@ var results = await client.SearchAsync("records", new SearchQuery("movie")
 var nextResults = await client.SearchAsync(results.Body.NextLink);
 ```
 
-### Execute a query with highlighting: 
 
+### Execute a query with highlighting: 
 
 ```C#
 var client = new IndexQueryClient(connection);
@@ -122,8 +147,8 @@ var results = await client.SearchAsync("records", new SearchQuery("movie")
 	.HighlightPostTag("</p>"));
 ```
 
-### Execute a query with faceting:
 
+### Execute a query with faceting:
 
 ```C#
 var client = new IndexQueryClient(connection);
@@ -134,8 +159,20 @@ var results = await client.SearchAsync("records", new SearchQuery("movie")
     .Count(true));
 ```
 
-### Execute a suggestion:
 
+### Execute a query with a score profile:
+
+```C#
+var client = new IndexQueryClient(connection);
+var results = await client.SearchAsync("records", new SearchQuery("products")
+    .SearchField("title")
+	.ScoringProfile("personalized")
+    .ScoringParameter("brands:brandA,brandB")
+    .Count(true));
+```
+
+
+### Execute a suggestion:
 
 ```C#
 var client = new IndexQueryClient(connection);
@@ -148,14 +185,15 @@ var results = await client.SuggestAsync("records", new SuggestionQuery("mov")
 	.Top(10));
 ```
 
-### Execute a lookup:
 
+### Execute a lookup:
 
 ```C#
 var client = new IndexQueryClient(connection);
 var results = await client.SuggestAsync("records", new LookupQuery("11ad89b6-9f1b-4380-aa06-8da39df61210")
 	.Select("author,title"));
 ```
+
 
 ### Handling exceptions:
 
