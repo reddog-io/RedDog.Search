@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constants.cs" />
     <Compile Include="Http\ApiConnection.cs" />
     <Compile Include="Http\ApiConstants.cs" />
     <Compile Include="Http\ApiRequestExtensions.cs" />
@@ -62,6 +63,7 @@
     <Compile Include="Http\RawApiRequest.cs" />
     <Compile Include="Http\XsdDurationConverter.cs" />
     <Compile Include="IndexQueryClient.cs" />
+    <Compile Include="ListExtensions.cs" />
     <Compile Include="Model\Analyzers.cs" />
     <Compile Include="Model\CorsOptions.cs" />
     <Compile Include="Model\FacetResult.cs" />
