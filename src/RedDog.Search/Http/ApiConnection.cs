@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -28,8 +29,10 @@ namespace RedDog.Search.Http
             _client.DefaultRequestHeaders.Add("Accept", "application/json;odata.metadata=none");
 
             // Configure serialization.
-            _formatter = new JsonMediaTypeFormatter();
-            _formatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            _formatter = new JsonMediaTypeFormatter
+            {
+                SerializerSettings = {ContractResolver = new CamelCasePropertyNamesContractResolver()}
+            };
             _formatter.SerializerSettings.Converters.Add(new StringEnumConverter { CamelCaseText = true });
             _formatter.SerializerSettings.Converters.Add(new XsdDurationConverter());
         }
@@ -42,13 +45,13 @@ namespace RedDog.Search.Http
 
         public static ApiConnection Create(Uri baseUri, string apiKey, IWebProxy proxy = null)
         {
-            var handler = new HttpClientHandler() { Proxy = proxy };
+            var handler = new HttpClientHandler { Proxy = proxy };
             return new ApiConnection(baseUri, apiKey, handler);
         }
 
         public static ApiConnection Create(string serviceName, string apiKey, IWebProxy proxy = null)
         {
-            var handler = new HttpClientHandler() { Proxy = proxy };
+            var handler = new HttpClientHandler { Proxy = proxy };
             return new ApiConnection(new Uri(String.Format(ApiConstants.BaseUrl, serviceName)), apiKey, handler);
         }
 
@@ -159,6 +162,15 @@ namespace RedDog.Search.Http
                 }
                 else
                 {
+                    if (response.StatusCode == HttpStatusCode.RequestEntityTooLarge)
+                    {
+                        response.Error = new Error
+                        {
+                            Message = message.ReasonPhrase,
+                            Code = ((int)response.StatusCode).ToString(CultureInfo.InvariantCulture)
+                        };
+                        return response;
+                    }
                     // Errors should also be deserialized.
                     var errorResponse = await message.Content.ReadAsAsync<ErrorResponse>(cancellationToken)
                         .ConfigureAwait(false);
