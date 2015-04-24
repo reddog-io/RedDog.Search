@@ -30,28 +30,28 @@ namespace RedDog.Search.Model
         }
 
         [JsonProperty("searchable")]
-        public bool Searchable
+        public bool? Searchable
         {
             get;
             set;
         }
 
         [JsonProperty("filterable")]
-        public bool Filterable
+        public bool? Filterable
         {
             get;
             set;
         }
 
         [JsonProperty("sortable")]
-        public bool Sortable
+        public bool? Sortable
         {
             get;
             set;
         }
 
         [JsonProperty("facetable")]
-        public bool Facetable
+        public bool? Facetable
         {
             get;
             set;
@@ -59,21 +59,21 @@ namespace RedDog.Search.Model
 
         [ObsoleteAttribute("Consider using the suggesters property introduced in version 2014-10-20-Preview instead of this option for suggestions. In a future version the suggestions property will be deprecated in favor of using a separate suggesters specification.")]
         [JsonProperty("suggestions")]
-        public bool Suggestions
+        public bool? Suggestions
         {
             get;
             set;
         }
 
         [JsonProperty("key")]
-        public bool Key
+        public bool? Key
         {
             get;
             set;
         }
 
         [JsonProperty("retrievable")]
-        public bool Retrievable
+        public bool? Retrievable
         {
             get;
             set;

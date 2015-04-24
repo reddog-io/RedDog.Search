@@ -7,6 +7,7 @@ using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using RedDog.Search.Model.Internal;
@@ -32,6 +33,7 @@ namespace RedDog.Search.Http
             _formatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
             _formatter.SerializerSettings.Converters.Add(new StringEnumConverter { CamelCaseText = true });
             _formatter.SerializerSettings.Converters.Add(new XsdDurationConverter());
+            _formatter.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
         }
 
         public Uri BaseUri
